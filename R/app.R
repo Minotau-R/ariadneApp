@@ -156,7 +156,7 @@ server <- function(input, output) {
                 include = input$include,
                 exclude = input$exclude,
                 res.name = input$resource,
-                init = input$text_init,
+                init = if( input$init_type == "text") input$init_text else fread(input$init_file$datapath),
                 prune = input$weave_prune,
                 use.names = input$names,
                 threshold = input$threshold,
