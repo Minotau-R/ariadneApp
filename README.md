@@ -14,9 +14,8 @@ and ultimately cross the graph to link features from different databases.
 
 ## Usage
 
-ariadneApp is openly available as a web app at
-[this address](https://ariadneapp-minotaur.2.rahtiapp.fi/) (this may change in
-the future). Alternatively, it can be installed and deployed locally. For local
+ariadneApp is currently not available as a web app (this may change in the
+future). Alternatively, it can be installed and deployed locally. For local
 use, Internet connection is required.
 
 ## Installation instructions
