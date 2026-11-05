@@ -1,5 +1,5 @@
 Package: ariadneApp
-Version: 0.0.3
+Version: 0.0.4
 Authors@R:
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
           email = "giulio.benedetti@utu.fi",
@@ -42,4 +42,4 @@ URL: https://github.com/Minotau-R/ariadneApp
 BugReports: https://github.com/Minotau-R/ariadneApp/issues
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.1
