@@ -20,8 +20,23 @@
 #'     shinePath()
 #' }
 
-#' @rdname shinePath
 #' @export
+#' @rdname shinePath
+#' @importFrom ariadne ariadne
 shinePath <- function(){
-    shinyApp(ui = ui(), server = server)
+    # Initialise permanent objects
+    pObjects <- new.env()
+    # Initialise reactive objects
+    rObjects <- reactiveValues(path_df = NULL, x2y = NULL)
+    # Import ariadne graph
+    pObjects$graph <- ariadne() |>
+        as_undirected(mode = "each")
+    # Create user interface
+    ui <- ui(pObjects)
+    # Create server side
+    server <- function(input, output){
+        .create_observers(input, output, rObjects, pObjects)
+    }
+    # Launch app
+    shinyApp(ui = ui, server = server)
 }

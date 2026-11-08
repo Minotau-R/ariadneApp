@@ -1,11 +1,15 @@
 
+#' @importFrom waiter use_waiter
+#' @importFrom shinyjs useShinyjs
 #' @importFrom htmltools br div
 #' @importFrom bslib page_sidebar bs_theme sidebar navset_tab nav_panel accordion accordion_panel
-ui <- function(){
-    
-    graph <- ariadne()
-    
+ui <- function(pObjects){
+    # Define landing page
     page_sidebar(
+        # Enable extensions
+        useShinyjs(),
+        use_waiter(),
+        
         fillable = FALSE,
         theme = bs_theme(bootswatch = "united"),
         sidebar = sidebar(navset_tab(
@@ -16,23 +20,25 @@ ui <- function(){
                 
                 numericInput("k", "k:", value = 1, min = 1),
                 
-                selectInput("include", "Include:", choices = V(graph)$name,
+                selectInput("include", "Include:",
+                    choices = V(pObjects$graph)$name,
                     selected = NULL, multiple = TRUE),
                 
-                selectInput("exclude", "Exclude:", choices = V(graph)$name,
+                selectInput("exclude", "Exclude:",
+                    choices = V(pObjects$graph)$name,
                     selected = NULL, multiple = TRUE),
                 
                 selectInput("resource", "Resource:",
-                    choices = unique(E(graph)$source), selected = NULL,
-                    multiple = TRUE),
+                    choices = unique(E(pObjects$graph)$source),
+                    selected = NULL, multiple = TRUE),
                 
                 checkboxInput("focus", "Focus"),
                 checkboxInput("prune", "Prune"),
-            
+                
                 downloadButton(outputId = "draw", label = "Draw",
                     class = "btn-warning", icon = icon("pencil"),
                     style = "float: right;")),
-                
+            
             nav_panel("Weave", br(),
                 
                 tags$style(HTML("
@@ -77,9 +83,14 @@ ui <- function(){
                     sliderInput("threshold", "Threshold:", min = 0, max = 1,
                         value = 0, step = 0.01, ticks = FALSE)),
                 
-                downloadButton(outputId = "weave", label = "Weave",
-                    class = "btn-warning", icon = icon("pencil"),
-                    style = "float: right;")))),
+                layout_columns(col_widths = c(6, 6),
+                    actionButton(inputId = "weave", label = "Weave",
+                        class = "btn-warning", icon = icon("pencil"),
+                        style = "float: right;"),
+                  
+                    downloadButton(outputId = "download", label = "Export",
+                        class = "btn-warning", style = "float: right;",
+                        enabled = FALSE))))),
         
         visNetworkOutput("network", height = "100vh", width = "100vw")
     )

@@ -21,3 +21,16 @@ importFrom(htmltools,
   br,
   div
 )
+importFrom(shinyjs,
+  enable,
+  useShinyjs
+)
+importFrom(stats,
+  as.formula,
+  reformulate
+)
+importFrom(waiter,
+  Waiter,
+  spin_fading_circles,
+  use_waiter
+)

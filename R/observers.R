@@ -1,20 +1,20 @@
 
-#' @importFrom ariadne ariadne drawPath weavePath weaveComplex
+#' @importFrom ariadne drawPath weavePath weaveComplex
+#' @importFrom stats as.formula reformulate
 #' @importFrom data.table fwrite
-server <- function(input, output) {
-    # Import ariadne graph
-    graph <- ariadne() |>
-        as_undirected(mode = "each")
+#' @importFrom shinyjs enable
+#' @importFrom waiter Waiter spin_fading_circles
+.create_observers <- function(input, output, rObjects, pObjects) {
     # Set node and edge ids
-    vertex_attr(graph, "id") <- V(graph)$name
-    edge_attr(graph, "id") <- seq_along(E(graph))
+    vertex_attr(pObjects$graph, "id") <- V(pObjects$graph)$name
+    edge_attr(pObjects$graph, "id") <- seq_along(E(pObjects$graph))
     # Retrieve node and edge data
-    node_df <- as_data_frame(graph, what = "vertices")
-    edge_df <- as_data_frame(graph, what = "edges")
+    node_df <- as_data_frame(pObjects$graph, what = "vertices")
+    edge_df <- as_data_frame(pObjects$graph, what = "edges")
     # Create default network
     output$network <- renderVisNetwork({
         # Define default network
-        visIgraph(graph, randomSeed = 123) |>
+        visIgraph(pObjects$graph, randomSeed = 123) |>
             visNodes(color = "darkorange") |>
             visEdges(color = list(color = "lightgrey", highlight = "red")) |>
             visInteraction(
@@ -77,17 +77,16 @@ server <- function(input, output) {
         nodes <- unlist(input$net_data$nodes)
         req(length(nodes) > 1L)
         # Define pathway formula
-        path_by <- c(nodes[1], nodes[length(nodes)]) |>
-            paste(collapse = "~") |>
-            as.formula()
+        path_by <- reformulate(nodes[length(nodes)], nodes[1])
         # Add intermediate nodes to include argument
         include <- if(length(nodes) > 2L) nodes[2:(length(nodes) - 1)] else NULL
         # Update observers based on selected pathway
         updateTextInput(inputId = "by", value = deparse(path_by))
         updateSelectInput(inputId = "include", selected = include)
         # Draw selected pathway
-        path_df <- drawPath(
-            graph,
+        rObjects$path_df <- .executeAriadne(
+            rObjects, "path_df", drawPath,
+            graph = pObjects$graph,
             by = path_by,
             k = input$k,
             include = input$include,
@@ -95,10 +94,12 @@ server <- function(input, output) {
             res.name = input$resource
         )
         # Get id of edges in the selected pathway
-        edges <- get_edge_ids(graph, path_df)
+        edges <- get_edge_ids(pObjects$graph, rObjects$path_df)
         # Find selected edges and nodes
         edge_selected <- edge_df$id %in% edges
-        node_selected <- node_df$id %in% union(path_df$from, path_df$to)
+        node_selected <- node_df$id %in% union(
+            rObjects$path_df$from, rObjects$path_df$to
+        )
         # Label selected edges with resource name
         edge_df$label <- ifelse(edge_selected, edge_df$source, " ")
         # If prune is on, hide unselected nodes and edges
@@ -121,9 +122,9 @@ server <- function(input, output) {
                     all.vars() |>
                     paste(collapse = "2")
                 # Complete file name
-                paste0(path_name, "-map-", Sys.Date(), ".tsv")
+                paste0(path_name, "-path-", Sys.Date(), ".tsv")
             },
-            content = function(file) fwrite(path_df, file, sep = "\t")
+            content = function(file) fwrite(rObjects$path_df, file, sep = "\t")
         )
     })
     # If focus is turned on
@@ -132,8 +133,48 @@ server <- function(input, output) {
         visNetworkProxy("network") |>
             visFit(nodes = unlist(input$net_data$nodes))
     })
+    # If weave button is pressed
+    observeEvent(input$weave, {
+        # Initialise spinner
+        w <- Waiter$new(
+            html = tagList(spin_fading_circles(), h4("Weaving pathway...")),
+            color = "#00000077"
+        )
+        w$show()
+        # Hide spinner upon completion
+        on.exit(w$hide(), add = TRUE)
+        # Select function by weave type
+        FUN <- switch(
+            input$weave_type, simple = weavePath, complex = weaveComplex
+        )
+        # Retrieve initial values
+        init <- switch(
+             input$init_type,
+             text = input$init_text,
+             file = fread(input$init_file$datapath)
+        )
+        # Weave pathway
+        rObjects$x2y <- .executeAriadne(
+            rObjects, "x2y", FUN,
+            graph = pObjects$graph,
+            by = as.formula(input$by),
+            k = input$k,
+            include = input$include,
+            exclude = input$exclude,
+            res.name = input$resource,
+            init = init,
+            prune = input$weave_prune,
+            use.names = input$names,
+            threshold = input$threshold,
+            batch.size = input$batch_size,
+            factor = input$factor
+        )
+        # Enable download button
+        if( !is.null(rObjects$x2y) ) enable("download")
+    })
+    
     # Weave and download linkmap
-    output$weave <- downloadHandler(
+    output$download <- downloadHandler(
         filename = function(){
             # Make file name from formula
             path_name <- input$by |>
@@ -141,30 +182,11 @@ server <- function(input, output) {
                 all.vars() |>
                 paste(collapse = "2")
             # Complete file name
-            paste0(path_name, "-links-", Sys.Date(), ".tsv")
+            paste0(path_name, "-map-", Sys.Date(), ".tsv")
         },
         content = function(file){
-            # Select function by weave type
-            FUN <- switch(
-                input$weave_type, simple = weavePath, complex = weaveComplex
-            )
-            # Weave pathway
-            x2y <- FUN(
-                graph,
-                by = as.formula(input$by),
-                k = input$k,
-                include = input$include,
-                exclude = input$exclude,
-                res.name = input$resource,
-                init = if( input$init_type == "text") input$init_text else fread(input$init_file$datapath),
-                prune = input$weave_prune,
-                use.names = input$names,
-                threshold = input$threshold,
-                batch.size = input$batch_size,
-                factor = input$factor
-            )
             # Write linkmap to file
-            fwrite(x2y, file, sep = "\t")
+            fwrite(rObjects$x2y, file, sep = "\t")
         }
     )
 }

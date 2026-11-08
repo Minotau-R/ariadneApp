@@ -1,5 +1,5 @@
 Package: ariadneApp
-Version: 0.0.4
+Version: 0.0.5
 Authors@R:
     c(person(given = "Giulio", family = "Benedetti", role = c("aut", "cre"),
           email = "giulio.benedetti@utu.fi",
@@ -30,14 +30,15 @@ Imports:
     ariadne,
     bslib,
     data.table,
-    htmltools
+    htmltools,
+    shinyjs
 Suggests:
     BiocStyle,
     rmarkdown,
     remotes,
     testthat (>= 3.0.0)
 Remotes:
-    codeberg::Minotau-R/ariadne
+    codeberg:Minotau-R/ariadne
 URL: https://github.com/Minotau-R/ariadneApp
 BugReports: https://github.com/Minotau-R/ariadneApp/issues
 Roxygen: list(markdown = TRUE)
