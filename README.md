@@ -7,19 +7,18 @@
 ariadneApp is a Shiny app for interactively exploring the ariadne resource graph
 that is stored in [ariadneDB](https://github.com/Minotau-R/ariadneDB). Thus, it
 is an interactive alternative to the R package
-[ariadne](https://github.com/Minotau-R/ariadne) and its Python extension
+[ariadne](https://codeberg.org/Minotau-R/ariadne) and its Python extension
 [ariadnePy](https://github.com/Minotau-R/ariadnePy). With this app, it is
 possible to dynamically explore the ariadne resource graph, select pathways
 and ultimately cross the graph to link features from different databases.
 
 ## Usage
 
-ariadneApp is openly available as a web app at
-[this address](https://ariadneapp-minotaur.2.rahtiapp.fi/) (this may change in
-the future). Alternatively, it can be installed and deployed locally. For local
+ariadneApp is currently not available as a web app (this may change in the
+future). Alternatively, it can be installed and deployed locally. For local
 use, Internet connection is required.
 
-## Installation instructions
+### Installation instructions
 
 The app can be installed as follows:
 
@@ -27,7 +26,7 @@ The app can be installed as follows:
 remotes::install_github("Minotau-R/ariadneApp")
 ```
 
-## Example
+### Example
 
 In the local environment, you can import the app and launch it as follows:
 
@@ -45,6 +44,6 @@ shinePath()
 
 ariadneApp was made possible thanks to the following dependencies:
 
-- ariadne
-- visNetwork
-- shiny
+- [ariadne](https://codeberg.org/Minotau-R/ariadne)
+- [visNetwork](https://cran.r-project.org/package=visNetwork)
+- [ariadne](https://codeberg.org/Minotau-R/ariadne)

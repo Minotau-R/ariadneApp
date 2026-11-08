@@ -1,0 +1,10 @@
+destination: docs
+reference:
+- title: App
+- subtitle: Main
+- contents:
+  - shinePath
+#- subtitle: Other
+#- contents:
+#  - utils
+#  - constants
