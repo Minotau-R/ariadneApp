@@ -31,7 +31,8 @@ Imports:
     bslib,
     data.table,
     htmltools,
-    shinyjs
+    shinyjs,
+    waiter
 Suggests:
     BiocStyle,
     rmarkdown,
