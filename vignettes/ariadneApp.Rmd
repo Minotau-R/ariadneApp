@@ -1,0 +1,120 @@
+---
+title: "ariadneApp: interactively explore the ariadne resource graph"
+author:
+  - name: Giulio Benedetti
+    affiliation: University of Turku
+    email: giulio.benedetti@utu.fi
+output:
+    BiocStyle::html_document:
+        fig_height: 7
+        fig_width: 10
+        toc: true
+        toc_float: true
+        toc_depth: 2
+        number_sections: true
+        self_contained: true
+        code_folding: show
+bibliography: ../inst/REFERENCES.bib
+date: "`r doc_date()`"
+package: "`r pkg_ver('ariadneApp')`"
+vignette: >
+  %\VignetteIndexEntry{ariadneApp: interactively explore the ariadne resource graph}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>"
+)
+```
+
+```{r screenfun, eval = !exists("SCREENSHOT"), include = FALSE}
+SCREENSHOT <- function(x, ...) knitr::include_graphics(x)
+```
+
+## Introduction
+
+ariadneApp is a web app version of the ariadne package designed to interactively
+weave resources across the ariadne graph.
+
+## Tutorial
+
+### Installation
+
+### Example
+
+The app can be launched with `shinePath()`.
+
+```{r start, message = FALSE, warning = FALSE}
+# Import ariadneApp
+library(ariadneApp)
+
+# Launch ariadneApp
+if (interactive()) {
+    shinePath()
+}
+```
+
+```{r screenplot1, echo = FALSE, out.width = "100%"}
+SCREENSHOT("screenshots/initial.png", delay = 20)
+```
+
+By zooming in, it is possible to focus on specific regions of the graph. With a
+long press, you can select nodes to link. Single click on empty areas to remove
+the selection.
+
+```{r screenplot2, echo = FALSE, out.width = "100%"}
+SCREENSHOT("screenshots/path.png", delay = 20)
+```
+
+Selecting `resources` will subset the graph to the chosen ones.
+
+`Prune`, `Focus`.
+
+```{r screenplot3, echo = FALSE, out.width = "100%"}
+SCREENSHOT("screenshots/subset.png", delay = 20)
+```
+
+## Resources
+
+### Citation
+
+```{r citation}
+## Citation info
+citation("ariadneApp")
+```
+
+### Background
+
+ariadneApp originates from the joint effort of the R/Bioconductor community. It
+is mainly based on the following software:
+
+- [R](https://www.r-project.org/), statistical programming language [@r2026]
+- [ariadne](https://codeberg.org/Minotau-R/ariadne), framework for multi-modal
+  integration of biological data [@ariadne2026]
+- [visNetwork](https://cran.r-project.org/package=visNetwork), interactive
+  network visualisation [@visnetwork2025]
+- [shiny](https://cran.r-project.org/package=shiny), web app development in R
+  [@shiny2026]
+
+### Help
+
+You can reach us by one of the communication channels listed
+[here](https://microbiome.github.io/OMA/docs/devel/pages/support.html). We are
+happy to receive questions, suggestions as well as contributions. For the last
+point, check the
+[contributor guidelines](https://microbiome.github.io/mia/CONTRIBUTING.html).
+
+## Reproducibility
+
+R session information:
+
+```{r reproduce, echo = FALSE}
+# Session info
+options(width = 120)
+sessionInfo()
+```
+
+## References
