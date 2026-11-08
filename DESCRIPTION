@@ -38,7 +38,7 @@ Suggests:
     remotes,
     testthat (>= 3.0.0)
 Remotes:
-    codeberg:Minotau-R/ariadne
+    github::Minotau-R/ariadne
 URL: https://github.com/Minotau-R/ariadneApp
 BugReports: https://github.com/Minotau-R/ariadneApp/issues
 Roxygen: list(markdown = TRUE)
