@@ -2,3 +2,4 @@ Changes in version 0.0.x
 * Initialised app
 * Implemented bslib dashboard
 * Added error catch strategy
+* Added unit tests

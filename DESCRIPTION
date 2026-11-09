@@ -35,6 +35,7 @@ Imports:
     waiter
 Suggests:
     BiocStyle,
+    knitr,
     rmarkdown,
     remotes,
     testthat (>= 3.0.0)
