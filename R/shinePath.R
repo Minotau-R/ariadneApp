@@ -27,12 +27,12 @@ shinePath <- function(){
     # Initialise permanent objects
     pObjects <- new.env()
     # Initialise reactive objects
-    rObjects <- reactiveValues(path_df = NULL, x2y = NULL)
+    rObjects <- reactiveValues(by = NULL, path_df = NULL, x2y = NULL)
     # Import ariadne graph
     pObjects$graph <- ariadne() |>
         as_undirected(mode = "each")
     # Create user interface
-    ui <- ui(pObjects)
+    ui <- .landing_page(pObjects)
     # Create server side
     server <- function(input, output){
         .create_observers(input, output, rObjects, pObjects)

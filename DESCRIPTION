@@ -23,12 +23,12 @@ License: Artistic-2.0
 Encoding: UTF-8
 Depends:
     R (>= 4.1),
+    bslib,
     igraph,
     shiny,
     visNetwork
 Imports:
     ariadne,
-    bslib,
     data.table,
     htmltools,
     shinyjs,

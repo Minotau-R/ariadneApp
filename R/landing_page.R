@@ -2,8 +2,7 @@
 #' @importFrom waiter use_waiter
 #' @importFrom shinyjs useShinyjs
 #' @importFrom htmltools br div
-#' @importFrom bslib page_sidebar bs_theme sidebar navset_tab nav_panel accordion accordion_panel
-ui <- function(pObjects){
+.landing_page <- function(pObjects){
     # Define landing page
     page_sidebar(
         # Enable extensions

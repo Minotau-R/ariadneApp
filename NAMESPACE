@@ -7,15 +7,6 @@ importFrom(ariadne,
   weaveComplex,
   weavePath
 )
-importFrom(bslib,
-  accordion,
-  accordion_panel,
-  bs_theme,
-  nav_panel,
-  navset_tab,
-  page_sidebar,
-  sidebar
-)
 importFrom(data.table,fwrite)
 importFrom(htmltools,
   br,
@@ -23,12 +14,10 @@ importFrom(htmltools,
 )
 importFrom(shinyjs,
   enable,
+  runjs,
   useShinyjs
 )
-importFrom(stats,
-  as.formula,
-  reformulate
-)
+importFrom(stats,reformulate)
 importFrom(waiter,
   Waiter,
   spin_fading_circles,

@@ -1,8 +1,7 @@
 
 #' @importFrom ariadne drawPath weavePath weaveComplex
-#' @importFrom stats as.formula reformulate
-#' @importFrom data.table fwrite
-#' @importFrom shinyjs enable
+#' @importFrom stats reformulate
+#' @importFrom shinyjs runjs enable
 #' @importFrom waiter Waiter spin_fading_circles
 .create_observers <- function(input, output, rObjects, pObjects) {
     # Set node and edge ids
@@ -71,23 +70,31 @@
         updateSelectInput(inputId = "include", selected = NA)
         updateSelectInput(inputId = "exclude", selected = NA)
     })
+    # Check if formula is input
+    observeEvent(input$by, {
+      runjs("
+            $(document).on('blur', '#by', function() {
+                Shiny.setInputValue('by_blur', Math.random());
+            });
+        ")
+    })
     # Draw pathway when two or more nodes are selected
     observe({
         # Check observe requirements
         nodes <- unlist(input$net_data$nodes)
         req(length(nodes) > 1L)
         # Define pathway formula
-        path_by <- reformulate(nodes[length(nodes)], nodes[1])
+        rObjects$by <- reformulate(nodes[length(nodes)], nodes[1])
         # Add intermediate nodes to include argument
         include <- if(length(nodes) > 2L) nodes[2:(length(nodes) - 1)] else NULL
         # Update observers based on selected pathway
-        updateTextInput(inputId = "by", value = deparse(path_by))
+        updateTextInput(inputId = "by", value = deparse(rObjects$by))
         updateSelectInput(inputId = "include", selected = include)
         # Draw selected pathway
         rObjects$path_df <- .executeAriadne(
             rObjects, "path_df", drawPath,
             graph = pObjects$graph,
-            by = path_by,
+            by = rObjects$by,
             k = input$k,
             include = input$include,
             exclude = input$exclude,
@@ -114,18 +121,8 @@
                 edgesId = edges,
                 highlightEdges = FALSE
             )
-        # Download map table
-        output$draw <- downloadHandler(
-            filename = function(){
-                # Make file name from formula
-                path_name <- path_by |>
-                    all.vars() |>
-                    paste(collapse = "2")
-                # Complete file name
-                paste0(path_name, "-path-", Sys.Date(), ".tsv")
-            },
-            content = function(file) fwrite(rObjects$path_df, file, sep = "\t")
-        )
+        # Download path table
+        output$draw <- .render_output(rObjects, "path_df")
     })
     # If focus is turned on
     observeEvent(input$focus, {
@@ -157,7 +154,7 @@
         rObjects$x2y <- .executeAriadne(
             rObjects, "x2y", FUN,
             graph = pObjects$graph,
-            by = as.formula(input$by),
+            by = rObjects$by,
             k = input$k,
             include = input$include,
             exclude = input$exclude,
@@ -172,21 +169,6 @@
         # Enable download button
         if( !is.null(rObjects$x2y) ) enable("download")
     })
-    
     # Weave and download linkmap
-    output$download <- downloadHandler(
-        filename = function(){
-            # Make file name from formula
-            path_name <- input$by |>
-                as.formula() |>
-                all.vars() |>
-                paste(collapse = "2")
-            # Complete file name
-            paste0(path_name, "-map-", Sys.Date(), ".tsv")
-        },
-        content = function(file){
-            # Write linkmap to file
-            fwrite(rObjects$x2y, file, sep = "\t")
-        }
-    )
+    output$download <- .render_output(rObjects, "x2y")
 }
