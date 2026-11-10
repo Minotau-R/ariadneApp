@@ -3,6 +3,8 @@
 [![issues](https://img.shields.io/github/issues/Minotau-R/ariadneApp)](https://github.com/Minotau-R/ariadneApp/issues)
 [![pulls](https://img.shields.io/github/issues-pr/Minotau-R/ariadneApp)](https://github.com/Minotau-R/ariadneApp/pulls)
 [![R-CMD-check](https://github.com/Minotau-R/ariadneApp/workflows/build/badge.svg)](https://github.com/Minotau-R/ariadneApp/actions)
+[![codecov](https://codecov.io/gh/Minotau-R/ariadneApp/graph/badge.svg?token=tLDfWl8aX2)](https://codecov.io/gh/Minotau-R/ariadneApp)
+[![CodeFactor](https://www.codefactor.io/repository/github/minotau-r/ariadneapp/badge)](https://www.codefactor.io/repository/github/minotau-r/ariadneapp)
 
 ariadneApp is a Shiny app for interactively exploring the ariadne resource graph
 that is stored in [ariadneDB](https://github.com/Minotau-R/ariadneDB). Thus, it
