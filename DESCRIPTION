@@ -41,7 +41,7 @@ Suggests:
     testthat (>= 3.0.0)
 Remotes:
     github::Minotau-R/ariadne
-URL: https://codeberg.org/Minotau-R/ariadneApp
+URL: https://codeberg.org/Minotau-R/ariadneApp, https://minotau-r.github.io/ariadneApp
 BugReports: https://codeberg.org/Minotau-R/ariadneApp/issues
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

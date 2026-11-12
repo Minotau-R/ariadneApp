@@ -1,9 +1,18 @@
+url: https://minotau-r.github.io/ariadneApp
 destination: docs
+
+template:
+  bootstrap: 5
+  light-switch: true
+  css: extra.css
+  bslib:
+    navbar-bg: "#8B0000"
+
 reference:
-- title: App
-- subtitle: Main
-- contents:
-  - shinePath
+  - title: ariadne app
+    contents:
+      - shinePath
+
 #- subtitle: Other
 #- contents:
 #  - utils
