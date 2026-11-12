@@ -3,4 +3,7 @@ pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   ariadneApp: ariadneApp.html
-last_built: 2026-11-10T03:22Z
+last_built: 2026-11-12T03:46Z
+urls:
+  reference: https://minotau-r.github.io/ariadneApp/reference
+  article: https://minotau-r.github.io/ariadneApp/articles
